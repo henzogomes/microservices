@@ -8,8 +8,14 @@ app.use(express.json());
 
 setUserRoutes(app);
 
+// Add this health check endpoint before your existing routes
 app.get("/health", (req, res) => {
-  res.status(200).json({ status: "User Service is running", port: 3000 });
+  res.json({
+    status: "healthy",
+    service: "user-service",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
 
 app.listen(PORT, () => {

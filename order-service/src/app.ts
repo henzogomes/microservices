@@ -6,11 +6,17 @@ const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 
-setOrderRoutes(app);
-
+// Add this health check endpoint before your existing routes
 app.get("/health", (req, res) => {
-  res.status(200).json({ status: "Order Service is running", port: 3001 });
+  res.json({
+    status: "healthy",
+    service: "order-service",
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime(),
+  });
 });
+
+setOrderRoutes(app);
 
 app.listen(PORT, () => {
   console.log(`Order service is running on port ${PORT}`);
